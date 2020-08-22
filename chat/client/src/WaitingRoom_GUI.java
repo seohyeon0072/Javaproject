@@ -98,6 +98,7 @@ public class WaitingRoom_GUI extends JFrame {
 
 	private boolean Exitflag;
 
+	//대기실 GUI
 	public WaitingRoom_GUI(Socket sock, ObjectOutputStream oos, ObjectInputStream ois, WaitingRoom waitingroom,
 			String name) {
 
@@ -480,7 +481,6 @@ public class WaitingRoom_GUI extends JFrame {
 						oos.writeObject(send);
 						oos.flush();
 						oos.reset();
-						// throw new Exception();
 					} catch (Exception ex) {
 //						ex.printStackTrace();
 					}
@@ -675,6 +675,7 @@ public class WaitingRoom_GUI extends JFrame {
 		});
 	}
 
+	//스레드
 	ExecutorService executorService = Executors.newFixedThreadPool(20);
 
 	// class WinInputThread extends Thread {
@@ -704,17 +705,11 @@ public class WaitingRoom_GUI extends JFrame {
 						String id = (String) send.getObj()[0];
 
 						taWaitingRoomChat.append(id + "님이 접속을 하셨습니다." + "\n");
-						// taWaitingRoomChat.setForeground(Color.BLUE);
-
 						break;
 
 					// 방 생성 -> 입장
 					case ServerProtocol.CREATE_CHATROOM_SUCCESS:
 						ChatRoomInfo ri = (ChatRoomInfo) send.getObj()[0];
-						// System.out.println(chatuserlist);
-						// System.out.println("방에있는 유저리스트" +
-						// ri.getChatRoomUserList());
-
 						dispose();
 						new ChatRoom_GUI(ri, sock, oos, ois, name);
 
@@ -753,7 +748,6 @@ public class WaitingRoom_GUI extends JFrame {
 								oos.writeObject(send);
 								oos.flush();
 								oos.reset();
-								// System.out.println("수락 수락 보냄");
 							} catch (Exception me) {
 //								me.printStackTrace();
 							}
@@ -764,9 +758,7 @@ public class WaitingRoom_GUI extends JFrame {
 								oos.writeObject(send);
 								oos.flush();
 								oos.reset();
-								// System.out.println("거절 코드 보냄");
 							} catch (Exception me) {
-//								me.printStackTrace();
 							}
 						}
 
@@ -967,7 +959,6 @@ public class WaitingRoom_GUI extends JFrame {
 	public void check(MouseEvent pe) {
 		if (pe.isPopupTrigger()) { // if the event shows the menu
 			waitingRoomUserList.setSelectedIndex(waitingRoomUserList.locationToIndex(pe.getPoint()));
-			// System.out.println(waitingRoomUserList.getSelectedValue());
 			waitingUserListPopupMenu.show(waitingRoomUserList, pe.getX(), pe.getY());
 		}
 	}

@@ -37,7 +37,7 @@ public class ChatThread extends Thread {
 		this.ht = ht;
 
 		try {
-			oos = new ObjectOutputStream(sock.getOutputStream());
+			oos = new ObjectOutputStream(sock.getOutputStream()); //객체직렬화를 사용하게 해주는 객체
 			ois = new ObjectInputStream(sock.getInputStream());
 		} catch (IOException e) {
 //			e.printStackTrace();
@@ -64,7 +64,6 @@ public class ChatThread extends Thread {
 					id = String.valueOf(sd.getObj()[0]); // 가지고 왔음
 					for (int i = 0; i < allUserList.size(); i++) {
 						if (id.equals(allUserList.get(i).getId())) {
-
 							state = ServerProtocol.ENTRANCE_FAIL;
 							sd = new SendData(code);
 							oos.writeObject(sd);
@@ -89,19 +88,18 @@ public class ChatThread extends Thread {
 
 						WaitingRoom wr = new WaitingRoom(allUserList, waitUserList, allChatRoomInfo);
 
-						ht.put(user, oos);
-						// sd = new
-						// SendData(ServerProtocol.ENTRANCE_SUCCESS,user.getId());
-						sd = new SendData(ServerProtocol.ENTRANCE_SUCCESS, wr);
-						oos.writeObject(sd);
-						oos.flush();
+						ht.put(user, oos); //hashtable 안에  user,oos 넣어줌
+					 
+						sd = new SendData(ServerProtocol.ENTRANCE_SUCCESS, wr); //sendData에 클래스로 가공해서 보냄
+						oos.writeObject(sd); 
+						oos.flush(); //반드시 비워줘야함
 						oos.reset();
 
 						if (waitUserList.size() > 1) {
-							updateWaitList(waitUserList, allChatRoomList, oos);
+							updateWaitList(waitUserList, allChatRoomList, oos); //
 							broadcast(ServerProtocol.ENTRANCE_SUCCESS);
 						} else if (waitUserList.size() == 1) {
-							broadcast(ServerProtocol.ENTRANCE_SUCCESS);
+							broadcast(ServerProtocol.ENTRANCE_SUCCESS); //대기실 안에 있는 사람에게 입장 성공했다고 알린다
 						}
 					}
 					break;
@@ -155,12 +153,10 @@ public class ChatThread extends Thread {
 
 					break;
 
-				// 채팅방 입장하기
+				// 채팅방 입장하기: 
 				case ClientProtocol.ENTER_CHATROOM:
-					// ChatRoomInfo , chatRoomUserList:Vector<User>
 					title = String.valueOf(sd.getObj()[0]);
 					ObjectOutputStream oos2 = (ObjectOutputStream) ht.get(user);
-					// boolean flag1 = false;
 					int size = 0;
 					Vector<String> chatuserlist = null;
 					for (int i = 0; i < allChatRoomList.size(); i++) {
@@ -177,8 +173,6 @@ public class ChatThread extends Thread {
 									oos2.reset();
 									break;
 								} catch (Exception e) {
-//									e.printStackTrace();
-//									System.out.println("MultiChatThread  -sendmsg-");
 								}
 
 							} else {
@@ -218,10 +212,7 @@ public class ChatThread extends Thread {
 										oos2.flush();
 										oos2.reset();
 									} catch (Exception e) {
-//										e.printStackTrace();
-//										System.out.println("MultiChatThread  -sendmsg-");
 									}
-									// flag1 = true;
 									if (waitUserList.size() >= 1) {
 										updateWaitList(waitUserList, allChatRoomList, oos2);
 									}
@@ -248,8 +239,7 @@ public class ChatThread extends Thread {
 						oos7.flush();
 						oos7.reset();
 					} catch (Exception e) {
-//						e.printStackTrace();
-//						System.out.println("MultiChatThread  -sendmsg-");
+ 
 					}
 
 					break;
@@ -293,7 +283,7 @@ public class ChatThread extends Thread {
 							}
 						}
 					}
-					// for문 끝
+				 
 					if (st == true) {
 						for (int i = 0; i < allUserList.size(); i++) {
 							if (allUserList.get(i).getChatLocation().equals(titlee)) {
@@ -1046,11 +1036,7 @@ public class ChatThread extends Thread {
 //					e.printStackTrace();
 				}
 
-				/*
-				 * try { oos.writeObject(sd); oos.flush(); oos.reset(); } catch
-				 * (IOException e) { e.printStackTrace(); }
-				 */
-
+ 
 			}
 		}
 	}
